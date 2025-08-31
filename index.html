@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="GenCompositor generates composited video results according to user-specified trajectory and scale parameter.">
+  <meta name="keywords" content="Diffusion Models, Video Editing, Video Compositing">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GenCompositor: Generative Video Compositing with Diffusion Transformer</title>
+
+
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:wght@600|Lato:wght@400;700|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/gallery.css"/>
+  <link rel="icon" href="./static/images/arc_logo.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="./static/js/gallery.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">GenCompositor: Generative Video Compositing with Diffusion Transformer</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://ysz2022.github.io/">Shuzhou Yang</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://xiaoyu258.github.io/">Xiaoyu Li</a><sup>2</sup><sup>*</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://vinthony.github.io/">Xiaodong Cun</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="http://gzwang.xyz/">Guangzhi Wang</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://lg-li.github.io/">Lingen Li</a><sup>4</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.linkedin.com/in/YingShanProfile/">Ying Shan</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://jianzhang.tech/">Jian Zhang</a><sup>1</sup><sup>*</sup>
+            </span>
+          </div>
+
+          
+          <div class="is-size-5 publication-authors">
+                    <span class="author-block">
+                    <sup>1</sup> Peking University &nbsp;&nbsp;&nbsp;
+                    <sup>2</sup> Tencent &nbsp;&nbsp;&nbsp;
+                    <sup>3</sup> Great Bay University &nbsp;&nbsp;&nbsp;
+                    <sup>4</sup> The Chinese University of Hong Kong</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>*</sup>Corresponding authors</span>
+          </div>
+          
+          <div>
+	          <span><img src="./static/images/pku_logo.png" width="9%"></span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span></span><img src="./static/images/arc_logo.png" width="20%"></span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- arXiv Link. -->
+              <span class="link-block">
+                <!-- TODO -->
+                <a href="https://arxiv.org/abs/2407.17470"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <!-- TODO -->
+                <a href="https://huggingface.co/TencentARC/GenCompositor" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-desktop"></i>
+                  </span>
+                  <span>Model</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/TencentARC/GenCompositor"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+<!--              &lt;!&ndash; blog Link. &ndash;&gt;-->
+<!--              <span class="link-block">-->
+<!--                <a href="https://stability.ai/news/stable-video-4d"-->
+<!--                   class="external-link button is-normal is-rounded is-dark">-->
+<!--                  <span class="icon">-->
+<!--                      <i class="far fa-images"></i>-->
+<!--                  </span>-->
+<!--                  <span>Blog</span>-->
+<!--                  </a>-->
+<!--                </span>-->
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" autoplay muted loop playsinline height="100%">
+        <source src="./static/images/Figure_1.mp4"
+                type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf">GenCompositor</span> takes a foreground video and a background video as inputs and generates composited video results according to user-specified trajectory and scale parameter.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<div id="lightbox" class="modal">
+  <span class="close cursor" onclick="closeModal()">&times;</span>
+  <div class="modal-content"></div> 
+</div>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          Video compositing combines live-action footage to create video production, serving as a crucial technique in video creation and film production.
+          Traditional pipelines require intensive labor efforts and expert collaboration, resulting in lengthy production cycles and high manpower costs.
+          To address this issue, we automate this process with generative models, called generative video compositing.
+          This new task strives to adaptively inject identity and motion information of foreground video to the target video in an interactive manner, allowing users to customize the size, motion trajectory, and other attributes of the dynamic elements added in final video.
+          Specifically, we designed a novel Diffusion Transformer (DiT) pipeline based on its intrinsic properties.
+          To maintain consistency of the target video before and after editing, we revised a light-weight DiT-based background preservation branch with masked token injection.
+          As to inherit dynamic elements from other sources, a DiT fusion block is proposed using full self-attention, along with a simple yet effective foreground augmentation for training.
+          Besides, for fusing background and foreground videos with different layouts based on user control, we developed a novel position embedding, named Extended Rotary Position Embedding (ERoPE).
+          Finally, we curated a dataset comprising 61K sets of videos for our new task, called VideoComp. This data includes complete dynamic elements and high-quality target videos.
+          Experiments demonstrate that our method effectively realizes generative video compositing, outperforming existing possible solutions in fidelity and consistency.
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Summary Video</h2>
+        <div class="publication-video">
+          <iframe src="https://www.youtube.com/embed/G93GUaQ0hmI?rel=0&amp;showinfo=0"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <!-- Comparison. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Results and Comparison</h2>
+
+        <!-- NVS -->
+        <h3 class="title is-4">Video Harmonization</h3>
+        <div class="content has-text-justified">
+          <p>
+            Comparing our results with baselines.
+          </p>
+          <video id="teaser" autoplay muted loop playsinline width="100%">
+            <source src="./static/images/harm_comparison.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <br/>
+        <!--/ NVS -->
+
+        <!-- 3D -->
+        <h3 class="title is-4">4D Optimization</h3>
+        <div class="content has-text-justified">
+          <p>
+            Comparing our results with baselines.
+          </p>
+          <video id="teaser" autoplay muted loop playsinline width="100%">
+            <source src="./static/images/traj_comparison.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+
+
+        <h2 class="title is-3">More commpositing results of GenCompositor</h2>
+        <div class="content has-text-justified">
+          <video id="teaser" autoplay muted loop playsinline width="100%">
+            <source src="./static/images/Figure_2.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    <!--/ Comparison. -->
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>
+	@article{yang2025gencompositor,
+	    title={GenCompositor: Generative Video Compositing with Diffusion Transformer},
+	    author={Shuzhou Yang and Xiaoyu Li and Xiaodong Cun and Guangzhi Wang and Lingen Li and Ying Shan and Jian Zhang},
+	    journal={arXiv preprint arXiv:2407.17470},
+	    year={2025},
+	}
+    </code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+        <div class="content">
+          <p>
+            This website is based on the template from <a
+              href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+          </p>
+        </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
