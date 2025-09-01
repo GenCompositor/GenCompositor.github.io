@@ -242,18 +242,29 @@
 
 		<div style="margin-top: 1rem;"></div>
 
-        <h3 class="title is-4">Compositing results of GenCompositor</h3>
+        <h3 class="title is-4">Video demos</h3>
         <p>
-          Click the left or right button to browse more results.
+          GenCompositor supports user-specified trajectory and rescale parameter, where rescale parameter can be time-varying to realize near-large-far-small effects.
         </p>
-        <div class="carousel-container">
+        <div class="carousel-container" id="video-demos-carousel">
           <div class="carousel-slide active">
             <video src="./static/images/Figure_2.mp4" autoplay loop muted playsinline></video>
           </div>
           <div class="carousel-slide">
             <video src="./static/images/Figure_2.1.mp4" autoplay loop muted playsinline></video>
           </div>
-          <div class="carousel-slide">
+          <button class="carousel-btn prev">&#10094;</button>
+          <button class="carousel-btn next">&#10095;</button>
+          <!-- Dot indicators -->
+          <div class="carousel-dots"></div>
+        </div>
+
+        <h3 class="title is-4">More compositing results of GenCompositor</h3>
+        <p>
+          Click the left or right button to browse more results.
+        </p>
+        <div class="carousel-container" id="more-results-carousel">
+          <div class="carousel-slide active">
             <video src="./static/images/Figure_4.1.mp4" autoplay loop muted playsinline></video>
           </div>
           <div class="carousel-slide">
@@ -273,7 +284,6 @@
           </div>
           <button class="carousel-btn prev">&#10094;</button>
           <button class="carousel-btn next">&#10095;</button>
-
           <!-- Dot indicators -->
           <div class="carousel-dots"></div>
         </div>
@@ -350,97 +360,107 @@
 </footer>
 
 <script>
-    // JavaScript for carousel
-    const slides = document.querySelectorAll('.carousel-slide');
-    const prevBtn = document.querySelector('.prev');
-    const nextBtn = document.querySelector('.next');
-    const dotsContainer = document.querySelector('.carousel-dots');
-    let currentSlide = 0;
-    const slideIntervalTime = 5000; // 5 seconds auto switch
-    let slideInterval;
+    // JavaScript for carousels
+    function initCarousel(containerId) {
+        const container = document.getElementById(containerId);
+        const slides = container.querySelectorAll('.carousel-slide');
+        const prevBtn = container.querySelector('.prev');
+        const nextBtn = container.querySelector('.next');
+        const dotsContainer = container.querySelector('.carousel-dots');
+        let currentSlide = 0;
+        const slideIntervalTime = 5000; // 5 seconds auto switch
+        let slideInterval;
 
-    // Create dot indicators
-    function createDots() {
-      for (let i = 0; i < slides.length; i++) {
-        const dot = document.createElement('span');
-        dot.classList.add('dot');
-        if (i === 0) dot.classList.add('active');
-        dot.setAttribute('data-index', i);
-        dotsContainer.appendChild(dot);
+        // Create dot indicators
+        function createDots() {
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < slides.length; i++) {
+                const dot = document.createElement('span');
+                dot.classList.add('dot');
+                if (i === 0) dot.classList.add('active');
+                dot.setAttribute('data-index', i);
+                dotsContainer.appendChild(dot);
 
-        dot.addEventListener('click', function() {
-          const index = parseInt(this.getAttribute('data-index'));
-          goToSlide(index);
+                dot.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    goToSlide(index);
+                });
+            }
+        }
+
+        // Update dot indicators
+        function updateDots(index) {
+            const dots = dotsContainer.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        const showSlide = (index) => {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+                const video = slide.querySelector('video');
+                if (i === index) {
+                    video.play();
+                } else {
+                    video.pause();
+                    video.currentTime = 0;
+                }
+            });
+            updateDots(index);
+        };
+
+        const goToSlide = (index) => {
+            currentSlide = index;
+            showSlide(currentSlide);
+            resetInterval();
+        };
+
+        const nextSlide = () => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        };
+
+        const prevSlide = () => {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        };
+
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            resetInterval();
         });
-      }
+
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            resetInterval();
+        });
+
+        const startInterval = () => {
+            slideInterval = setInterval(nextSlide, slideIntervalTime);
+        };
+
+        const resetInterval = () => {
+            clearInterval(slideInterval);
+            startInterval();
+        };
+
+        // Initial setup
+        createDots();
+        showSlide(currentSlide);
+        startInterval();
     }
 
-    // Update dot indicators
-    function updateDots(index) {
-      const dots = document.querySelectorAll('.dot');
-      dots.forEach((dot, i) => {
-        if (i === index) {
-          dot.classList.add('active');
-        } else {
-          dot.classList.remove('active');
-        }
-      });
-    }
-
-    const showSlide = (index) => {
-      slides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === index);
-        const video = slide.querySelector('video');
-        if (i === index) {
-          video.play();
-        } else {
-          video.pause();
-          video.currentTime = 0;
-        }
-      });
-      updateDots(index);
-    };
-
-    const goToSlide = (index) => {
-      currentSlide = index;
-      showSlide(currentSlide);
-      resetInterval();
-    };
-
-    const nextSlide = () => {
-      currentSlide = (currentSlide + 1) % slides.length;
-      showSlide(currentSlide);
-    };
-
-    const prevSlide = () => {
-      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-      showSlide(currentSlide);
-    };
-
-    nextBtn.addEventListener('click', () => {
-      nextSlide();
-      resetInterval();
+    // Initialize both carousels
+    document.addEventListener('DOMContentLoaded', function() {
+        initCarousel('video-demos-carousel');
+        initCarousel('more-results-carousel');
     });
-
-    prevBtn.addEventListener('click', () => {
-      prevSlide();
-      resetInterval();
-    });
-
-    const startInterval = () => {
-      slideInterval = setInterval(nextSlide, slideIntervalTime);
-    };
-
-    const resetInterval = () => {
-      clearInterval(slideInterval);
-      startInterval();
-    };
-
-    // Initial setup
-    createDots();
-    showSlide(currentSlide);
-    startInterval();
-  </script>
+</script>
 
 </body>
 </html>
