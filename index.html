@@ -28,6 +28,42 @@
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
   <script src="./static/js/gallery.js"></script>
+  <style>
+    /* Add minimal CSS for carousel without disrupting original style */
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      max-width: 800px; /* Adjust to match original video size if needed */
+      margin: 0 auto;
+    }
+    .carousel-slide {
+      display: none;
+    }
+    .carousel-slide.active {
+      display: block;
+    }
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    .prev {
+      left: 10px;
+    }
+    .next {
+      right: 10px;
+    }
+    video {
+      width: 100%;
+      height: auto;
+    }
+  </style>
 </head>
 <body>
 
@@ -60,7 +96,7 @@
             </span>
           </div>
 
-          
+
           <div class="is-size-5 publication-authors">
                     <span class="author-block">
                     <sup>1</sup> SECE, Peking University &nbsp;&nbsp;&nbsp;
@@ -72,7 +108,7 @@
           <div class="is-size-5 publication-authors">
             <span class="author-block">Corresponding authors<sup>*</sup></span>
           </div>
-          
+
           <div>
 	          <span><img src="./static/images/pku_logo.png" width="9%"></span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -146,7 +182,7 @@
 
 <div id="lightbox" class="modal">
   <span class="close cursor" onclick="closeModal()">&times;</span>
-  <div class="modal-content"></div> 
+  <div class="modal-content"></div>
 </div>
 
 <section class="section">
@@ -193,15 +229,49 @@
     <div class="columns is-centered">
       <div class="column is-full-width">
         <h2 class="title is-3">Results and Comparison</h2>
-		
+
 		<div style="margin-top: 1rem;"></div>
+
         <h3 class="title is-4">Compositing results of GenCompositor</h3>
-        <div class="content has-text-justified">
-          <video id="teaser" autoplay muted loop playsinline width="100%">
-            <source src="./static/images/Figure_2.mp4"
-                    type="video/mp4">
-          </video>
+        <p>
+          Click the left or right button to browse more results.
+        </p>
+        <div class="carousel-container">
+        <div class="carousel-slide active">
+          <video src="./static/images/Figure_2.mp4" autoplay loop muted playsinline></video>
         </div>
+        <div class="carousel-slide">
+          <video src="./static/images/Figure_2.1.mp4" autoplay loop muted playsinline></video>
+        </div>
+        <div class="carousel-slide">
+          <video src="./static/images/Figure_2.2.mp4" autoplay loop muted playsinline></video>
+        </div>
+        <div class="carousel-slide">
+          <video src="./static/images/Figure_2.3.mp4" autoplay loop muted playsinline></video>
+        </div>
+        <div class="carousel-slide">
+          <video src="./static/images/Figure_2.4.mp4" autoplay loop muted playsinline></video>
+        </div>
+        <div class="carousel-slide">
+          <video src="./static/images/Figure_2.5.mp4" autoplay loop muted playsinline></video>
+        </div>
+        <div class="carousel-slide">
+          <video src="./static/images/Figure_2.6.mp4" autoplay loop muted playsinline></video>
+        </div>
+        <div class="carousel-slide">
+          <video src="./static/images/Figure_2.7.mp4" autoplay loop muted playsinline></video>
+        </div>
+        <button class="carousel-btn prev">&#10094;</button>
+        <button class="carousel-btn next">&#10095;</button>
+      </div>
+
+<!--        <h3 class="title is-4">Compositing results of GenCompositor</h3>-->
+<!--        <div class="content has-text-justified">-->
+<!--          <video id="teaser" autoplay muted loop playsinline width="100%">-->
+<!--            <source src="./static/images/Figure_2.mp4"-->
+<!--                    type="video/mp4">-->
+<!--          </video>-->
+<!--        </div>-->
 
         <!-- Harm -->
         <h3 class="title is-4">Video Harmonization</h3>
@@ -234,7 +304,7 @@
         <h3 class="title is-4">Extended Application of Video Element Removal</h3>
         <div class="content has-text-justified">
           <p>
-            Comparing our results with baselines.
+            GenCompositor supports related applications, including video element removal and replace.
           </p>
           <video id="teaser" autoplay muted loop playsinline width="100%">
             <source src="./static/images/Figure_3.mp4"
@@ -275,6 +345,62 @@
     </div>
   </div>
 </footer>
+
+<script>
+    // JavaScript for carousel
+    const slides = document.querySelectorAll('.carousel-slide');
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+    let currentSlide = 0;
+    const slideIntervalTime = 5000; // 5 seconds auto switch
+    let slideInterval;
+
+    const showSlide = (index) => {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+        const video = slide.querySelector('video');
+        if (i === index) {
+          video.play();
+        } else {
+          video.pause();
+          video.currentTime = 0;
+        }
+      });
+    };
+
+    const nextSlide = () => {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showSlide(currentSlide);
+    };
+
+    const prevSlide = () => {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      showSlide(currentSlide);
+    };
+
+    nextBtn.addEventListener('click', () => {
+      nextSlide();
+      resetInterval();
+    });
+
+    prevBtn.addEventListener('click', () => {
+      prevSlide();
+      resetInterval();
+    });
+
+    const startInterval = () => {
+      slideInterval = setInterval(nextSlide, slideIntervalTime);
+    };
+
+    const resetInterval = () => {
+      clearInterval(slideInterval);
+      startInterval();
+    };
+
+    // Initial setup
+    showSlide(currentSlide);
+    startInterval();
+  </script>
 
 </body>
 </html>
