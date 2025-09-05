@@ -1,4 +1,4 @@
-# ![](statics/images/gencompositor_logo.png) GenCompositor.github.io
+# ![](./static/images/gencompositor_logo.png) GenCompositor.github.io
 This is the project code of our paper: ''GenCompositor: Generative Video Compositing with Diffusion Transformer''.
 
 Link: https://gencompositor.github.io/
